@@ -1,68 +1,117 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #1a1a1a;
+  color: #f0f0f0;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+header h1 {
+  font-size: 3rem;
+  color: #00c2c7;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.controls, .suggestion-input {
+  margin-bottom: 2rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 button {
+  flex-grow: 1;
+  padding: 0.8em 1.2em;
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: background-color 0.25s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:disabled {
+  background-color: #333;
+  cursor: not-allowed;
+}
+
+.btn-start { background-color: #28a745; color: white; }
+.btn-start:hover { background-color: #218838; }
+.btn-stop { background-color: #dc3545; color: white; }
+.btn-stop:hover { background-color: #c82333; }
+.btn-summarize { background-color: #007bff; color: white; }
+.btn-summarize:hover { background-color: #0069d9; }
+.btn-suggest { background-color: #6f42c1; color: white; width: 100%; margin-top: 1rem; }
+.btn-suggest:hover { background-color: #5a32a3; }
+
+.panel {
+  background-color: #242424;
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-height: 150px;
+  margin-bottom: 2rem;
+}
+
+.panel h3 {
+  margin-top: 0;
+  color: #888;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #f0f0f0;
+  font-family: monospace;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.suggestion-display {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #444;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  color: white;
+}
+
+.suggestion-display:hover .copy-btn {
+  opacity: 1;
 }
