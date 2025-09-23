@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FaCopy, FaCheck } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
@@ -13,6 +14,7 @@ if (SpeechRecognition) {
 }
 
 const SpeechRecognitionComponent = () => {
+  const [intent, setIntent] = useState('suggest');
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState(null);
@@ -87,7 +89,7 @@ const SpeechRecognitionComponent = () => {
     if (!transcript) return;
     setIsSuggesting(true);
     try {
-      const data = await callApi('suggest', { text: transcript, code_snippet: codeSnippet });
+      const data = await callApi('suggest', { text: transcript, code_snippet: codeSnippet, intent: intent });
       setSuggestion(data.suggestion);
       setExplanation(data.explanation);
     } catch (err) {
@@ -138,16 +140,35 @@ const SpeechRecognitionComponent = () => {
 
       <div className="suggestion-input panel">
         <h3>Get a Code Suggestion</h3>
-        <p>Describe your problem while listening, then paste your code and ask for a suggestion.</p>
+        <p>Describe your problem, select an action, then paste your code.</p>
+        <div className="intent-selector">
+          <button 
+            className={`intent-btn ${intent === 'suggest' ? 'active' : ''}`}
+            onClick={() => setIntent('suggest')}>
+            Fix or Suggest
+          </button>
+          <button 
+            className={`intent-btn ${intent === 'explain' ? 'active' : ''}`}
+            onClick={() => setIntent('explain')}>
+            Explain Code
+          </button>
+        </div>
         <textarea value={codeSnippet} onChange={(e) => setCodeSnippet(e.target.value)} placeholder="Paste relevant code here..."/>
         <button onClick={handleGetSuggestion} disabled={isListening || !transcript || isSuggesting} className="btn-suggest">
-          {isSuggesting ? 'Thinking...' : 'Get Suggestion'}
+          {isSuggesting ? 'Thinking...' : (intent === 'suggest' ? 'Get Suggestion' : 'Get Explanation')}
         </button>
       </div>
       
       <div className="panel">
         <h3>AI Suggestion</h3>
-        {explanation && <p>{explanation}</p>}
+        
+        {/* --- MODIFIED: Wrapped ReactMarkdown in a div with the className --- */}
+        {explanation && (
+          <div className="explanation-text">
+            <ReactMarkdown>{explanation}</ReactMarkdown>
+          </div>
+        )}
+        
         {suggestion && (
           <div className="suggestion-display">
             <button onClick={handleCopyCode} className="copy-btn">
@@ -158,7 +179,7 @@ const SpeechRecognitionComponent = () => {
             </SyntaxHighlighter>
           </div>
         )}
-        {!isSuggesting && !suggestion && <p>Code suggestion will appear here.</p>}
+        {!isSuggesting && !explanation && !suggestion && <p>Code suggestion will appear here.</p>}
       </div>
     </div>
   );
